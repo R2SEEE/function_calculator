@@ -1,6 +1,5 @@
-def main():
-    print("Hello")
+from functions.func import sin_maclaurin
 
 
 if "__main__" == __name__:
-    main()
+    print(sin_maclaurin(3, 5))
