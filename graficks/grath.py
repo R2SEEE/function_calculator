@@ -18,7 +18,8 @@ def change_axis_x(name_func):
         x_labels = [r'$-2\pi$', r'$-\frac{3\pi}{2}$', r'$-\pi$', r'$-\frac{\pi}{2}$', '0', r'$\frac{\pi}{2}$', r'$\pi$',
                     r'$\frac{3\pi}{2}$', r'$2\pi$']
 
-    if name_func == 'tg(x)' or name_func == 'ln(1 + x)':
+    if name_func == 'tg(x)' or name_func == 'ln(1 + x)' or name_func == '(1 + x)^m'\
+            or name_func == '1/(1+x)':
         x_ticks = [-np.pi, -np.pi / 2, 0, np.pi / 2, np.pi]
         x_labels = [r'$-\pi$', r'$-\frac{\pi}{2}$', '0', r'$\frac{\pi}{2}$', r'$\pi$']
 
@@ -105,6 +106,36 @@ def set_ln_x_1():
     return plt.plot(x_valid, y_values, label='ln(1 + x)', color=COLOR_FUNC)
 
 
+def set_1_x_m():
+    """
+    Создает график функции (1 + x)^m
+
+    :return: matplotlib.lines.Line2D: Объект линии графика.
+    """
+    m = 2
+    plt.figure(facecolor='lightgray')
+    x_values = np.linspace(-np.pi, np.pi, 400)
+    y_values = (1 + x_values) ** m
+    return plt.plot(x_values, y_values, label='$(1 + x)^m$, m={}'.format(m), color=COLOR_FUNC)
+
+
+def set_1_1_x():
+    """
+    Создает график функции 1/(1+x)
+
+    :return: matplotlib.lines.Line2D: Объект линии графика.
+    """
+    plt.figure(facecolor='lightgray')
+
+    x_values = np.linspace(-np.pi, np.pi, 400)
+    x_values = x_values[x_values != -1]
+    y_values = 1 / (1 + x_values)
+    return plt.plot(x_values, y_values, label='$1 / (1 + x)$', color=COLOR_FUNC)
+
+
+
+
+
 def initialization(name_func):
     """
     Инициализирует параметры графика перед построением.
@@ -117,11 +148,12 @@ def initialization(name_func):
     plt.ylabel('y')
 
     if name_func == 'tg(x)':
-        plt.ylim(-10, 10)
+        plt.ylim(-12, 12)
 
     plt.axhline(0, color=COLOR_X_Y, linewidth=THICKNESS_X_Y)  # горизонтальная ось
     plt.axvline(0, color=COLOR_X_Y, linewidth=THICKNESS_X_Y)  # вертикальная ось
-    plt.grid(CELLS_GRAPHICS, linestyle='--', alpha=0.7)
+    if CELLS_GRAPHICS:
+        plt.grid(True, linestyle='--', alpha=0.7)
     plt.legend()
     plt.show()
 
@@ -157,6 +189,17 @@ def graphic_visualization(fun) -> None:
         change_axis_x(fun)
         initialization(fun)
 
+    elif fun == '(1 + x)^m':
+        set_1_x_m()
+        change_axis_x(fun)
+        initialization(fun)
+
+    elif fun == '1/(1+x)':
+        set_1_1_x()
+        change_axis_x(fun)
+        initialization(fun)
+
+
 
 if __name__ == '__main__':
-    graphic_visualization('ln(1 + x)')
+    graphic_visualization('(1 + x)^m')
