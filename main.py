@@ -1,4 +1,5 @@
 import math
+import numpy
 
 from functions.func import sin_maclaurin, cos_maclaurin
 from graficks.grath import graphic_visualization

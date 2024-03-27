@@ -18,7 +18,7 @@ def change_axis_x(name_func):
         x_labels = [r'$-2\pi$', r'$-\frac{3\pi}{2}$', r'$-\pi$', r'$-\frac{\pi}{2}$', '0', r'$\frac{\pi}{2}$', r'$\pi$',
                     r'$\frac{3\pi}{2}$', r'$2\pi$']
 
-    if name_func == 'tg(x)':
+    if name_func == 'tg(x)' or name_func == 'ln(1 + x)':
         x_ticks = [-np.pi, -np.pi / 2, 0, np.pi / 2, np.pi]
         x_labels = [r'$-\pi$', r'$-\frac{\pi}{2}$', '0', r'$\frac{\pi}{2}$', r'$\pi$']
 
@@ -33,7 +33,7 @@ def change_axis_x(name_func):
 
 def set_sin():
     """
-    Создает график функции синуса sin(x)
+    Создает график функции sin(x)
     :return: matplotlib.lines.Line2D: Объект линии графика.
     """
     plt.figure(facecolor='lightgray')
@@ -44,7 +44,7 @@ def set_sin():
 
 def set_cos():
     """
-    Создает график функции синуса cos(x)
+    Создает график функции cos(x)
     :return: matplotlib.lines.Line2D: Объект линии графика.
     """
     plt.figure(facecolor='lightgray')
@@ -55,7 +55,7 @@ def set_cos():
 
 def set_tg():
     """
-    Создает график функции синуса tg(x)
+    Создает график функции tg(x)
     :return: matplotlib.lines.Line2D: Объект линии графика.
     """
     plt.figure(facecolor='lightgray')
@@ -67,7 +67,7 @@ def set_tg():
 
 def set_arctg():
     """
-    Создает график функции синуса arctg(x)
+    Создает график функции arctg(x)
 
     :return: matplotlib.lines.Line2D: Объект линии графика.
     """
@@ -79,7 +79,7 @@ def set_arctg():
 
 def set_e_x():
     """
-    Создает график функции синуса e^(x)
+    Создает график функции e^(x)
 
     :return: matplotlib.lines.Line2D: Объект линии графика.
     """
@@ -87,6 +87,22 @@ def set_e_x():
     x_values = np.linspace(-5 * np.pi, 5 * np.pi, 1000)
     y_values = np.exp(x_values)
     return plt.plot(x_values, y_values, label='$e^x$', color=COLOR_FUNC)
+
+
+def set_ln_x_1():
+    """
+    Создает график функции ln(1 + x)
+
+    :return: matplotlib.lines.Line2D: Объект линии графика.
+    """
+    plt.figure(facecolor='lightgray')
+
+    x_values = np.linspace(-np.pi, np.pi, 400)
+    valid_indices = np.where(1 + x_values > 0)
+    x_valid = x_values[valid_indices]
+    y_values = np.log(1 + x_valid)
+
+    return plt.plot(x_valid, y_values, label='ln(1 + x)', color=COLOR_FUNC)
 
 
 def initialization(name_func):
@@ -136,6 +152,11 @@ def graphic_visualization(fun) -> None:
         change_axis_x(fun)
         initialization(fun)
 
+    elif fun == 'ln(1 + x)':
+        set_ln_x_1()
+        change_axis_x(fun)
+        initialization(fun)
+
 
 if __name__ == '__main__':
-    graphic_visualization('e^(x)')
+    graphic_visualization('ln(1 + x)')
