@@ -1,310 +1,198 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from graficks.setting import CELLS_GRAPHICS, THICKNESS_X_Y, COLOR_X_Y, MEASUREMENT_AXIS_X, \
-    COLOR_FUNC
+from matplotlib.widgets import Slider, RadioButtons, CheckButtons
 
 
-def change_axis_x(name_func):
+def plot_graph(name_function=None):
     """
-    Изменяет единицу измерения
-    оси x на PI
-    :return: None | object
-    """
-    x_ticks = None
-    x_labels = None
+    Построение графика выбранной функции.
 
-    if name_func == 'sin(x)' or name_func == 'cos(x)':
-        x_ticks = [-2 * np.pi, -3 * np.pi / 2, -np.pi, -np.pi / 2, 0, np.pi / 2, np.pi, 3 * np.pi / 2, 2 * np.pi]
-        x_labels = [r'$-2\pi$', r'$-\frac{3\pi}{2}$', r'$-\pi$', r'$-\frac{\pi}{2}$', '0', r'$\frac{\pi}{2}$', r'$\pi$',
-                    r'$\frac{3\pi}{2}$', r'$2\pi$']
+    Параметры:
+    - name_function (str): Название выбранной функции. Возможные значения:
+        'sin(x)', 'cos(x)', 'tg(x)', 'arctg(x)', 'e^(x)', 'ln(1 + x)', '(1 + x)^m',
+        '1/(1+x)', 'arcsin(x)', 'arccos(x)'.
 
-    if name_func == 'ln(1 + x)' or name_func == '(1 + x)^m' \
-            or name_func == '1/(1+x)' or name_func == 'arcsin(x)' or name_func == 'arccos(x)':
-        x_ticks = [-np.pi, -np.pi / 2, 0, np.pi / 2, np.pi]
-        x_labels = [r'$-\pi$', r'$-\frac{\pi}{2}$', '0', r'$\frac{\pi}{2}$', r'$\pi$']
-
-    if name_func == 'arctg(x)' or name_func == 'e^(x)' or name_func == '1/(1+x)':
-        x_ticks = [-5 * np.pi, -3 * np.pi, -np.pi, -np.pi / 2, 0, np.pi / 2, np.pi, 3 * np.pi, 5 * np.pi]
-        x_labels = [r'$-5\pi$', r'$-3\pi$', r'$-\pi$', r'$-\frac{\pi}{2}$', '0', r'$\frac{\pi}{2}$', r'$\pi$',
-                    r'$3\pi$', r'$5\pi$']
-
-    if name_func == 'tg(x)':
-        x_ticks = np.arange(-3 / 2 * np.pi, 3 / 2 * np.pi + np.pi / 2, np.pi / 2)
-        x_labels = [r"$-\frac{3\pi}{2}$", r"$-\pi$", r"$-\frac{\pi}{2}$", r"$0$",
-                    r"$\frac{\pi}{2}$", r"$\pi$", r"$\frac{3\pi}{2}$"]
-
-    if MEASUREMENT_AXIS_X == 'pi':
-        return plt.xticks(x_ticks, x_labels)
-
-
-def set_sin() -> None:
-    """
-    Создает график функции sin(x)
-
-    matplotlib.lines.Line2D: Объект линии графика.
-
-    :return: None
-    """
-    plt.figure(facecolor='lightgray')
-    x_values = np.linspace(-2 * np.pi, 2 * np.pi, 100)  # от -2π до 2π
-    y_values = np.sin(x_values)
-    plt.plot(x_values, y_values, color=COLOR_FUNC, label='sin(x)')
-
-
-def set_cos() -> None:
-    """
-    Создает график функции cos(x)
-
-    matplotlib.lines.Line2D: Объект линии графика.
-
-    :return: None
-    """
-    plt.figure(facecolor='lightgray')
-    x_values = np.linspace(-2 * np.pi, 2 * np.pi, 100)
-    y_values = np.cos(x_values)
-    plt.plot(x_values, y_values, color=COLOR_FUNC, label='cos(x)')
-
-
-def set_tg() -> None:
-    """
-    Создает график функции tg(x)
-
-    matplotlib.lines.Line2D: Объект линии графика.
-
-    :return: None
+    Возвращает: None
     """
 
-    # генерируем значения для оси x от -1.5π до 1.5π
-    x_values = np.linspace(-1.5 * np.pi, 1.5 * np.pi, 1000)
+    def change_axis_x(name_func):
+        """
+        Изменяет единицу измерения оси x на PI.
 
-    # разбиваем значения x на интервалы между асимптотами
-    asymptotes = np.arange(-np.pi / 2, np.pi / 2 + np.pi, np.pi)
-    asymptote_indices = np.searchsorted(x_values, asymptotes)
+        Возвращает: None
+        """
+        x_ticks = None
+        x_labels = None
 
-    for i in range(len(asymptotes) - 1):
-        x_section = x_values[asymptote_indices[i]:asymptote_indices[i + 1]]
-        y_section = np.tan(x_section)
-        plt.plot(x_section, y_section, color=COLOR_FUNC)
+        if name_func == 'sin(x)' or name_func == 'cos(x)':
+            x_ticks = [-2 * np.pi, -3 * np.pi / 2, -np.pi, -np.pi / 2, 0, np.pi / 2, np.pi, 3 * np.pi / 2, 2 * np.pi]
+            x_labels = [r'$-2\pi$', r'$-\frac{3\pi}{2}$', r'$-\pi$', r'$-\frac{\pi}{2}$', '0', r'$\frac{\pi}{2}$',
+                        r'$\pi$',
+                        r'$\frac{3\pi}{2}$', r'$2\pi$']
 
+        if name_func == 'ln(1 + x)' or name_func == '(1 + x)^m' \
+                or name_func == '1/(1+x)' or name_func == 'arcsin(x)' or name_func == 'arccos(x)':
+            x_ticks = [-np.pi, -np.pi / 2, 0, np.pi / 2, np.pi]
+            x_labels = [r'$-\pi$', r'$-\frac{\pi}{2}$', '0', r'$\frac{\pi}{2}$', r'$\pi$']
 
-def set_arctg() -> None:
-    """
-    Создает график функции arctg(x)
+        if name_func == 'arctg(x)' or name_func == 'e^(x)' or name_func == '1/(1+x)':
+            x_ticks = [-5 * np.pi, -3 * np.pi, -np.pi, -np.pi / 2, 0, np.pi / 2, np.pi, 3 * np.pi, 5 * np.pi]
+            x_labels = [r'$-5\pi$', r'$-3\pi$', r'$-\pi$', r'$-\frac{\pi}{2}$', '0', r'$\frac{\pi}{2}$', r'$\pi$',
+                        r'$3\pi$', r'$5\pi$']
 
-    matplotlib.lines.Line2D: Объект линии графика.
+        if name_func == 'tg(x)':
+            x_ticks = np.arange(-3 / 2 * np.pi, 3 / 2 * np.pi + np.pi / 2, np.pi / 2)
+            x_labels = [r"$-\frac{3\pi}{2}$", r"$-\pi$", r"$-\frac{\pi}{2}$", r"$0$",
+                        r"$\frac{\pi}{2}$", r"$\pi$", r"$\frac{3\pi}{2}$"]
 
-    :return: None
-    """
-    plt.figure(facecolor='lightgray')
-    x_values = np.linspace(-5 * np.pi, 5 * np.pi, 1000)
-    y_values = np.arctan(x_values)
-    plt.plot(x_values, y_values, label='arctan(x)', color=COLOR_FUNC)
+        graph_axes.set_xticks(x_ticks)
+        graph_axes.set_xticklabels(x_labels)
 
+    def updateGraph():
+        """
+        Обновляет график при изменении параметров.
+        """
+        nonlocal name_function
 
-def set_e_x() -> None:
-    """
-    Создает график функции e^(x)
+        x = 1
+        y = 4
 
-    matplotlib.lines.Line2D: Объект линии графика.
+        if name_function == 'sin(x)':
+            x = np.linspace(-2 * np.pi, 2 * np.pi, 100)  # от -2π до 2π
+            y = np.sin(x)
 
-    :return: None
-    """
-    plt.figure(facecolor='lightgray')
-    x_values = np.linspace(-5 * np.pi, 5 * np.pi, 1000)
-    y_values = np.exp(x_values)
-    plt.plot(x_values, y_values, label='$e^x$', color=COLOR_FUNC)
+        if name_function == 'cos(x)':
+            x = np.linspace(-2 * np.pi, 2 * np.pi, 100)  # от -2π до 2π
+            y = np.cos(x)
 
+        if name_function == 'tg(x)':
+            x = np.linspace(-1.5 * np.pi, 1.5 * np.pi, 1000)
+            y = np.tan(x)
 
-def set_ln_x_1() -> None:
-    """
-    Создает график функции ln(1 + x)
+        if name_function == 'arctg(x)':
+            x = np.linspace(-5 * np.pi, 5 * np.pi, 1000)
+            y = np.arctan(x)
 
-    matplotlib.lines.Line2D: Объект линии графика.
+        if name_function == 'e^(x)':
+            x = np.linspace(-5 * np.pi, 5 * np.pi, 1000)
+            y = np.exp(x)
 
-    :return: None
-    """
-    plt.figure(facecolor='lightgray')
+        if name_function == 'ln(1 + x)':
+            x_values = np.linspace(-np.pi, np.pi, 400)
+            valid_indices = np.where(1 + x_values > 0)
+            x = x_values[valid_indices]
+            y = np.log(1 + x)
 
-    x_values = np.linspace(-np.pi, np.pi, 400)
-    valid_indices = np.where(1 + x_values > 0)
-    x_valid = x_values[valid_indices]
-    y_values = np.log(1 + x_valid)
+        if name_function == '(1 + x)^m':
+            m = 2
+            x = np.linspace(-np.pi, np.pi, 400)
+            y = (1 + x) ** m
 
-    plt.plot(x_valid, y_values, label='ln(1 + x)', color=COLOR_FUNC)
+        if name_function == '1/(1+x)':
+            x = np.linspace(-10, -1.01, 400)
+            y = 1 / (1 + x)
 
+        if name_function == 'arcsin(x)':
+            x = np.linspace(-1, 1, 400)
+            y = np.arcsin(x)
 
-def set_1_x_m() -> None:
-    """
-    Создает график функции (1 + x)^m
+        if name_function == 'arccos(x)':
+            x = np.linspace(-1, 1, 400)
+            y = np.arccos(x)
 
-    matplotlib.lines.Line2D: Объект линии графика.
+        colors = {"Красный": "r", "Синий": "b", "Зеленый": "g"}
 
-    :return: None
-    """
-    m = 2
-    plt.figure(facecolor='lightgray')
-    x_values = np.linspace(-np.pi, np.pi, 400)
-    y_values = (1 + x_values) ** m
-    plt.plot(x_values, y_values, label='$(1 + x)^m$, m={}'.format(m), color=COLOR_FUNC)
+        style = colors[radiobuttons_color.value_selected]
 
+        size = slider_size_func.val
 
-def set_1_1_x() -> None:
-    """
-    Создает график функции 1/(1+x)
+        graph_axes.clear()
+        graph_axes.axhline(0, linewidth=1.3, color='black')
+        graph_axes.axvline(0, linewidth=1.3, color='black')
 
-    matplotlib.lines.Line2D: Объект линии графика.
+        grid_visible = checkbuttons_grid.get_status()[0]
+        graph_axes.grid(grid_visible)
 
-    :return: None
-    """
-    x1 = np.linspace(-10, -1.01, 400)  # для x < -1
-    x2 = np.linspace(-0.99, 10, 400)  # для x > -1
+        if checkbuttons_pi.get_status()[0]:
+            change_axis_x(name_function)
 
-    y1 = 1 / (1 + x1)
-    y2 = 1 / (1 + x2)
+        graph_axes.set_title(f'График: {name_function}')
 
-    plt.plot(x1, y1, label='$1 / (1 + x)$', color=COLOR_FUNC, linewidth=2)
-    plt.plot(x2, y2, color=COLOR_FUNC, linewidth=2)
+        if name_function == 'tg(x)':
+            graph_axes.set_xlim(-1.5 * np.pi, 1.5 * np.pi)
+            graph_axes.set_ylim(-12, 12)
 
+        if name_function == '1/(1+x)':
+            graph_axes.set_xlim(-10, 10)
+            graph_axes.set_ylim(-1, 1)
+            x2 = np.linspace(-0.99, 10, 400)
+            y2 = 1 / (1 + x2)
+            graph_axes.plot(x2, y2, color=style, linewidth=size)
 
-def initialization(name_func):
-    """
-    Инициализирует параметры графика перед построением.
+        graph_axes.plot(x, y, color=style, linewidth=size)
 
-    :param name_func: Название функции
-    :return: None
-    """
-    plt.title(f'Графи: {name_func}')
-    plt.xlabel('x')
-    plt.ylabel('y')
+        plt.draw()
 
-    if name_func == 'tg(x)':
-        plt.xlim(-1.5 * np.pi, 1.5 * np.pi)
-        plt.ylim(-12, 12)
+    def onChangeValue(value: np.float64):
+        '''!!! Обработчик события изменения значений слайдеров'''
+        updateGraph()
 
-    if name_func == '1/(1+x)':
-        plt.xlim(-10, 10)
-        plt.ylim(-1, 1)
+    def onRadioButtonsClicked(value: str):
+        """!!! Обработчик события при клике по RadioButtons"""
+        updateGraph()
 
-    plt.axhline(0, color=COLOR_X_Y, linewidth=THICKNESS_X_Y)  # горизонтальная ось
-    plt.axvline(0, color=COLOR_X_Y, linewidth=THICKNESS_X_Y)  # вертикальная ось
+    def onCheckClicked(value: str):
+        """!!! Обработчик события при нажатии на флажок"""
+        updateGraph()
 
-    if CELLS_GRAPHICS:
-        plt.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
-    plt.legend()
+    fig, graph_axes = plt.subplots()  # окно с графиком
+    fig.patch.set_facecolor('lightblue')
+    fig.subplots_adjust(left=0.07, right=0.95, top=0.95, bottom=0.4)
+
+    axes_slider_size_func = plt.axes([0.3, 0.17, 0.5, 0.04])
+    slider_size_func = Slider(axes_slider_size_func,
+                              label='x',
+                              valmin=0.05,
+                              valmax=5.0,
+                              valinit=0.95,
+                              valfmt='%1.2f')
+
+    axes_radiobuttons = plt.axes([0.05, 0.09, 0.17, 0.2])
+    radiobuttons_color = RadioButtons(
+        axes_radiobuttons, ["Красный", "Синий", "Зеленый"]
+    )
+
+    axes_checkbuttons = plt.axes([0.05, 0.01, 0.17, 0.07])
+    checkbuttons_grid = CheckButtons(axes_checkbuttons, ["Сетка"], [True])
+
+    axes_checkbuttons_pi = plt.axes([0.23, 0.01, 0.09, 0.07])
+    checkbuttons_pi = CheckButtons(axes_checkbuttons_pi, ["PI"], [False])
+
+    radiobuttons_color.on_clicked(onRadioButtonsClicked)
+    slider_size_func.on_changed(onChangeValue)
+    checkbuttons_grid.on_clicked(onCheckClicked)
+    checkbuttons_pi.on_clicked(onCheckClicked)
+
+    name_function = name_function
+    updateGraph()
     plt.show()
 
 
-def set_arcsin() -> None:
-    """
-    Создает график функции arcsin(x)
+def show_list_function():
+    ls_fun = ['sin(x)',
+              'cos(x)',
+              'tg(x)',
+              'e^(x)',
+              'ln(1 + x)',
+              '(1 + x)^m',
+              '1/(1+x)',
+              'arcsin(x)',
+              'arctg(x)',
+              'arccos(x)']
 
-    matplotlib.lines.Line2D: Объект линии графика.
-
-    :return: None
-    """
-    x = np.linspace(-1, 1, 400)
-    y = np.arcsin(x)
-
-    plt.plot(x, y, label='$\\arcsin(x)$', color=COLOR_FUNC)
-
-
-def set_arccos() -> None:
-    """
-    Создает график функции arccos(x)
-
-    matplotlib.lines.Line2D: Объект линии графика.
-
-    :return: None
-    """
-
-    x = np.linspace(-1, 1, 400)
-    y = np.arccos(x)
-
-    plt.plot(x, y, label='$\\arccos(x)$', color=COLOR_FUNC)
-
-
-def graphic_visualization(fun) -> None:
-    """
-    Отображает график выбранной функции.
-
-    Аргумент:
-    fun (str): название выбранной функции из списка доступных.
-
-    :return: None
-    """
-
-    dict_funcs = {
-        'sin(x)': 'set_sin()',
-        'cos(x)': 'set_cos()',
-        'tg(x)': 'set_tg()',
-        'arctg(x)': 'set_arctg()',
-        'e^(x)': 'set_e_x()',
-        'ln(1 + x)': 'set_ln_x_1()',
-        '1/(1+x)': 'set_1_1_x()',
-        'arcsin(x)': 'set_arcsin()',
-        'arccos(x)': 'set_arccos()'
-
-    }
-
-    if fun == 'sin(x)':
-        set_sin()
-        change_axis_x(fun)
-        initialization(fun)
-
-    elif fun == 'cos(x)':
-        set_cos()
-        change_axis_x(fun)
-        initialization(fun)
-
-    elif fun == 'tg(x)':
-        set_tg()
-        change_axis_x(fun)
-        initialization(fun)
-
-    elif fun == 'arctg(x)':
-        set_arctg()
-        change_axis_x(fun)
-        initialization(fun)
-
-    elif fun == 'e^(x)':
-        set_e_x()
-        change_axis_x(fun)
-        initialization(fun)
-
-    elif fun == 'ln(1 + x)':
-        set_ln_x_1()
-        change_axis_x(fun)
-        initialization(fun)
-
-    elif fun == '(1 + x)^m':
-        set_1_x_m()
-        change_axis_x(fun)
-        initialization(fun)
-
-    elif fun == '1/(1+x)':
-        set_1_1_x()
-        change_axis_x(fun)
-        initialization(fun)
-
-    elif fun == 'arcsin(x)':
-        set_arcsin()
-        change_axis_x(fun)
-        initialization(fun)
-
-
-    elif fun == 'arccos(x)':
-        set_arccos()
-        change_axis_x(fun)
-        initialization(fun)
-
-    else:
-        print("функция не найден или некорректно введена,\n Словарь доступных функций:\n")
-        print("название | вызов_функции")
-        n = 0
-        for key, value in dict_funcs.items():
-            n += 1
-            print(f'{n}. {key} {value}')
+    for i in range(1, len(ls_fun) + 1):
+        print(f'{i}. {ls_fun[i - 1]}')
 
 
 if __name__ == '__main__':
-    pass
+    show_list_function()
