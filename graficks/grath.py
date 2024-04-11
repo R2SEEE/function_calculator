@@ -149,9 +149,9 @@ def plot_graph(name_function=None):
     fig.patch.set_facecolor('lightblue')
     fig.subplots_adjust(left=0.07, right=0.95, top=0.95, bottom=0.4)
 
-    axes_slider_size_func = plt.axes([0.3, 0.17, 0.5, 0.04])
+    axes_slider_size_func = plt.axes([0.35, 0.17, 0.5, 0.04])
     slider_size_func = Slider(axes_slider_size_func,
-                              label='x',
+                              label='size_fun',
                               valmin=0.05,
                               valmax=5.0,
                               valinit=0.95,
