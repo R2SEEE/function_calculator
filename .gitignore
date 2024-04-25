@@ -4,3 +4,6 @@ venv/
 .DS_Store
 __pycache__/
 pytest.ini
+functions/__pycache__/
+graficks/__pycache__/
+

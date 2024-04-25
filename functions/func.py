@@ -1,17 +1,21 @@
 from math import pi
+from numba import njit
 
 
+@njit
 def factorial(n):
     if n == 0:
         return 1
     else:
-        return n * factorial(n-1)
+        return n * factorial(n - 1)
 
 
+@njit
 def evaluate_error(step, x):
     return abs(x ** step / factorial(step))
 
 
+@njit
 def evaluate_error_exp(step, x):
     return abs((x ** step) / factorial(step))
 
@@ -28,6 +32,7 @@ def exp_maclaurin(x):
     return round(result, 9)
 
 
+@njit
 def evaluate_error_binomial(step, x, m):
     error = (x ** step) / factorial(step)
     error *= ((1 + x) ** (m - step))
@@ -36,6 +41,7 @@ def evaluate_error_binomial(step, x, m):
     return error
 
 
+@njit
 def binomial_maclaurin(x, m):
     if 1 > x > -1:
         n = 1
@@ -55,10 +61,12 @@ def binomial_maclaurin(x, m):
         raise ValueError("-1 < x < 1")
 
 
+@njit
 def evaluate_error_ln(step, x):
     return abs(x ** step / step)
 
 
+@njit
 def ln_maclaurin(x):
     if -1 < x <= 1:
         result = 0
@@ -74,10 +82,12 @@ def ln_maclaurin(x):
         raise ValueError("-1 < x <= 1")
 
 
+@njit
 def evaluate_error_hyperbole(step, x):
     return abs(x ** step)
 
 
+@njit
 def hyperbole_maclaurin(x):
     result = 1
     n = 1
@@ -90,6 +100,7 @@ def hyperbole_maclaurin(x):
     return round(result, 9)
 
 
+@njit
 def arcsin_maclaurin(x):
     if -1 <= x <= 1:
         result = x
@@ -113,10 +124,12 @@ def arcsin_maclaurin(x):
         raise ValueError("-1 <= x <= 1")
 
 
+@njit
 def arccos_maclaurin(x):
     return round(pi / 2 - arcsin_maclaurin(x), 9)
 
 
+@njit
 def arctan_maclaurin(x):
     if -1 <= x <= 1:
         result = 0
@@ -131,15 +144,16 @@ def arctan_maclaurin(x):
         return round(result, 9)
 
 
+@njit
 def tan_maclaurin(x):
     if x != pi / 2 and x != -pi / 2:
-        bernully_nums = [1, -1/2, 1/6]
+        bernully_nums = [1, -1 / 2, 1 / 6]
         result = 0
         k = 2
         n = 1
         while True:
             member = abs(bernully_nums[2 * n]) * 2 ** (2 * n) * (2 ** (2 * n) - 1) * x ** (2 * n - 1) / \
-                factorial(2 * n)
+                     factorial(2 * n)
             if abs(member) > pow(10, -11):
                 result += member
                 n += 1
@@ -154,11 +168,12 @@ def tan_maclaurin(x):
         raise ValueError("x != pi/2 + 2 * pi * k, k = Z")
 
 
+@njit
 def bernully_num(n, bernully_before_n):
     summary = 0
     for i in range(0, n):
         summary += factorial(n + 1) / (factorial(n + 1 - i) * factorial(i)) * \
-            bernully_before_n[i]
+                   bernully_before_n[i]
     res = -summary / (n + 1)
     bernully_before_n.append(res)
     return None

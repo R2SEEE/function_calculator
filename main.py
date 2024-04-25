@@ -4,7 +4,7 @@ import numpy
 
 from graficks.grath import plot_graph
 from functions.func import sin_maclaurin, cos_maclaurin, exp_maclaurin, binomial_maclaurin, ln_maclaurin, \
-    hyperbole_maclaurin
+    hyperbole_maclaurin, tan_maclaurin
 
 
 if "__main__" == __name__:
@@ -16,5 +16,6 @@ if "__main__" == __name__:
     print(f"(1 + {x}) ** {m} : {binomial_maclaurin(x, m)}")
     print(f"ln(1 + {x}) : {ln_maclaurin(x)}")
     print(f"1 / (1 + {x}) : {hyperbole_maclaurin(x)}")
+    print(tan_maclaurin(x))
 
-    plot_graph('sin(x)')
+    # plot_graph('sin(x)')
