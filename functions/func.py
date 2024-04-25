@@ -2,7 +2,6 @@ from math import pi
 from numba import njit
 
 
-@njit
 def factorial(n):
     if n == 0:
         return 1
@@ -10,12 +9,10 @@ def factorial(n):
         return n * factorial(n - 1)
 
 
-@njit
 def evaluate_error(step, x):
     return abs(x ** step / factorial(step))
 
 
-@njit
 def evaluate_error_exp(step, x):
     return abs((x ** step) / factorial(step))
 
@@ -32,7 +29,6 @@ def exp_maclaurin(x):
     return round(result, 9)
 
 
-@njit
 def evaluate_error_binomial(step, x, m):
     error = (x ** step) / factorial(step)
     error *= ((1 + x) ** (m - step))
@@ -41,7 +37,6 @@ def evaluate_error_binomial(step, x, m):
     return error
 
 
-@njit
 def binomial_maclaurin(x, m):
     if 1 > x > -1:
         n = 1
@@ -144,7 +139,6 @@ def arctan_maclaurin(x):
         return round(result, 9)
 
 
-@njit
 def tan_maclaurin(x):
     if x != pi / 2 and x != -pi / 2:
         bernully_nums = [1, -1 / 2, 1 / 6]
@@ -168,7 +162,6 @@ def tan_maclaurin(x):
         raise ValueError("x != pi/2 + 2 * pi * k, k = Z")
 
 
-@njit
 def bernully_num(n, bernully_before_n):
     summary = 0
     for i in range(0, n):
