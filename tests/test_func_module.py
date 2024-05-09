@@ -1,6 +1,7 @@
 import pytest
 import math
 from functions import func
+from decimal import Decimal
 
 
 @pytest.mark.parametrize("x, expected_result", [(0, round(math.sin(0), 9)),
@@ -11,10 +12,10 @@ from functions import func
                                                 (0.647, round(math.sin(0.647), 9)),
                                                 (-0.12, round(math.sin(-0.12), 9)),
                                                 (15, round(math.sin(15), 9)),
-                                                (-15, round(math.sin(-15), 9))
-                                                ])
+                                                (-15, round(math.sin(-15), 9)),
+                                                (0.0123, round(math.sin(0.0123), 9))])
 def test_sin(x, expected_result):
-    assert func.sin_maclaurin(x) == expected_result
+    assert func.sin_maclaurin(x) == Decimal(f"{expected_result}")
 
 
 @pytest.mark.parametrize("x, expected_result", [(0, round(math.cos(0), 9)),
@@ -28,21 +29,24 @@ def test_sin(x, expected_result):
                                                 (-15, round(math.cos(-15), 9))
                                                 ])
 def test_cos(x, expected_result):
-    assert func.cos_maclaurin(x) == expected_result
+    assert func.cos_maclaurin(x) == Decimal(f"{expected_result}")
 
 
-@pytest.mark.parametrize('x, expected_result', [(0, 1),
-                                                (2, 7.389056099),
-                                                (-3, 0.049787068),
-                                                (1, 2.718281828),
-                                                (10, 22026.465794807),
-                                                (-10, 0.0000454),
-                                                (153, 2.7993405242674957e+66),
-                                                (2.23, 9.299866079),
-                                                (4.124, 61.805972365),
-                                                (0.531, 1.700632091)])
+@pytest.mark.parametrize('x, expected_result', [(0, round(math.exp(0), 9)),
+                                                (2, round(math.exp(2), 9)),
+                                                (-3, round(math.exp(-3), 9)),
+                                                (1, round(math.exp(1), 9)),
+                                                (10, round(math.exp(10), 9)),
+                                                (-10, round(math.exp(-10), 9)),
+                                                (153, round(math.exp(153), 9)),
+                                                (200, round(math.exp(200), 9)),
+                                                (5.12, round(math.exp(5.12), 9)),
+                                                (2.23, round(math.exp(2.23), 9)),
+                                                (4.124, round(math.exp(4.124), 9)),
+                                                (0.531, round(math.exp(0.531), 9)),
+                                                (0.0123, round(math.exp(0.0123), 9))])
 def test_exp(x, expected_result):
-    assert func.exp_maclaurin(x) == expected_result
+    assert func.exp_maclaurin(x) == Decimal(f"{expected_result}")
 
 
 @pytest.mark.parametrize('x, m, expected_result', [(0.78, 4, 10.03875856),
@@ -54,7 +58,7 @@ def test_exp(x, expected_result):
                                                    (-0.156, 50, 0.00020755),
                                                    (-0.25, 60, 3.2e-08)])
 def test_binomial(x, m, expected_result):
-    assert func.binomial_maclaurin(x, m) == expected_result
+    assert func.binomial_maclaurin(x, m) == Decimal(f"{expected_result}")
 
 
 @pytest.mark.parametrize('x, expected_result', [(0.144, round(math.asin(0.144), 9)),
@@ -67,7 +71,7 @@ def test_binomial(x, m, expected_result):
                                                 (-0.54262, round(math.asin(-0.54262), 9)),
                                                 (-0.144, round(math.asin(-0.144), 9))])
 def test_arcsin(x, expected_result):
-    assert func.arcsin_maclaurin(x) == expected_result
+    assert func.arcsin_maclaurin(x) == Decimal(f"{expected_result}")
 
 
 @pytest.mark.parametrize('x, expected_result', [(0.144, round(math.acos(0.144), 9)),
@@ -80,7 +84,7 @@ def test_arcsin(x, expected_result):
                                                 (-0.542, round(math.acos(-0.542), 9)),
                                                 (-0.144, round(math.acos(-0.144), 9))])
 def test_arccos(x, expected_result):
-    assert func.arccos_maclaurin(x) == expected_result
+    assert func.arccos_maclaurin(x) == Decimal(f"{expected_result}")
 
 
 @pytest.mark.parametrize('x, expected_result', [(0.144, round(math.atan(0.144), 9)),
@@ -93,7 +97,7 @@ def test_arccos(x, expected_result):
                                                 (-0.542, round(math.atan(-0.542), 9)),
                                                 (-0.144, round(math.atan(-0.144), 9))])
 def test_arctan(x, expected_result):
-    assert func.arctan_maclaurin(x) == expected_result
+    assert func.arctan_maclaurin(x) == Decimal(f"{expected_result}")
 
 
 @pytest.mark.parametrize('x, expected_result', [(0.144, round(math.tan(0.144), 9)),
@@ -106,7 +110,7 @@ def test_arctan(x, expected_result):
                                                 (-0.542, round(math.tan(-0.542), 9)),
                                                 (-0.144, round(math.tan(-0.144), 9))])
 def test_tan(x, expected_result):
-    assert func.tan_maclaurin(x) == expected_result
+    assert func.tan_maclaurin(x) == Decimal(f"{expected_result}")
 
 
 @pytest.mark.parametrize('x, expected_result', [(0.144, round(math.log(1 + 0.144), 9)),
@@ -117,9 +121,11 @@ def test_tan(x, expected_result):
                                                 (-0.7235, round(math.log(1 + -0.7235), 9)),
                                                 (-0.9, round(math.log(1 + -0.9), 9)),
                                                 (-0.542, round(math.log(1 + -0.542), 9)),
-                                                (-0.144, round(math.log(1 + -0.144), 9))])
+                                                (-0.144, round(math.log(1 + -0.144), 9)),
+                                                (-0.999, round(math.log(1 + -0.999), 9)),
+                                                (0.999, round(math.log(1 + 0.999), 9))])
 def test_ln(x, expected_result):
-    assert func.ln_maclaurin(x) == expected_result
+    assert func.ln_maclaurin(x) == Decimal(f"{expected_result}")
 
 
 @pytest.mark.parametrize('x, expected_result', [(0.144, round(1 / (1 + 0.144), 9)),
@@ -132,4 +138,4 @@ def test_ln(x, expected_result):
                                                 (-0.542, round(1 / (1 + -0.542), 9)),
                                                 (-0.144, round(1 / (1 + -0.144), 9))])
 def test_hiperbole(x, expected_result):
-    assert func.hyperbole_maclaurin(x) == expected_result
+    assert func.hyperbole_maclaurin(x) == Decimal(f"{expected_result}")
