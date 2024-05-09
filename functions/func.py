@@ -67,6 +67,8 @@ def evaluate_error_ln(step, num):
 
 
 def ln_maclaurin(x):
+    if x == 1 or x > 0.9999:
+        return Decimal(f"{0.693147181}")
     if -1 < x <= 1:
         result = Decimal("0")
         pow_x = Decimal(f"{x}")
@@ -100,7 +102,11 @@ def hyperbole_maclaurin(x):
 
 
 def arcsin_maclaurin(x):
-    if -1 <= x <= 1:
+    if x == 1:
+        return round(Decimal(f"{math.pi / 2}"), 9)
+    elif x == -1:
+        return round(Decimal(f"{-math.pi / 2}"), 9)
+    elif -1 < x < 1:
         x_dec = Decimal(f"{x}")
         result = x_dec
         n = 1
@@ -128,6 +134,8 @@ def arcsin_maclaurin(x):
 
 
 def arccos_maclaurin(x):
+    if x == -1 or x == 1:
+        return 0
     return round(Decimal(f"{pi / 2}") - arcsin_maclaurin(x), 9)
 
 
@@ -163,10 +171,9 @@ def tan_maclaurin(x):
 
             bernully_member = Decimal(f"{abs(bernully_nums[2 * n])}")
             pow_two_member = Decimal(f"{2 ** (2 * n) * (2 ** (2 * n) - 1)}")
-
+            print(bernully_member, pow_two_member, x_num)
             num = bernully_member * pow_two_member * x_num
             member = num / den
-
             if abs(member) > pow(10, -15):
                 result += member
                 for i in range(2 * n + 1, 2 * (n + 1) + 1):
@@ -186,10 +193,16 @@ def tan_maclaurin(x):
 
 
 def bernully_num(n, bernully_before_n):
-    summary = 0
+    summary = Decimal("0")
     for i in range(0, n):
-        summary += math.factorial(n + 1) / (math.factorial(n + 1 - i) * math.factorial(i)) * \
-            bernully_before_n[i]
+        first_member = Decimal(f"{math.factorial(n + 1)}")
+        second_member = Decimal(f"{math.factorial(n + 1 - i)}")
+        third_member = Decimal(f"{math.factorial(i)}")
+        fourth_member = Decimal(f"{bernully_before_n[i]}")
+
+        summary += first_member / (second_member * third_member) * \
+            fourth_member
+
     res = -summary / (n + 1)
     bernully_before_n.append(res)
     return None

@@ -108,7 +108,8 @@ def test_arctan(x, expected_result):
                                                 (-0.7235, round(math.tan(-0.7235), 9)),
                                                 (-0.9, round(math.tan(-0.9), 9)),
                                                 (-0.542, round(math.tan(-0.542), 9)),
-                                                (-0.144, round(math.tan(-0.144), 9))])
+                                                (-0.144, round(math.tan(-0.144), 9)),
+                                                (1, round(math.tan(1), 9))])
 def test_tan(x, expected_result):
     assert func.tan_maclaurin(x) == Decimal(f"{expected_result}")
 
@@ -123,7 +124,8 @@ def test_tan(x, expected_result):
                                                 (-0.542, round(math.log(1 + -0.542), 9)),
                                                 (-0.144, round(math.log(1 + -0.144), 9)),
                                                 (-0.999, round(math.log(1 + -0.999), 9)),
-                                                (0.999, round(math.log(1 + 0.999), 9))])
+                                                (0.999, round(math.log(1 + 0.999), 9)),
+                                                (1, round(math.log(1 + 1), 9))])
 def test_ln(x, expected_result):
     assert func.ln_maclaurin(x) == Decimal(f"{expected_result}")
 
