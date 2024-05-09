@@ -3,17 +3,23 @@ from graficks.grath import plot_graph
 from functions.func import exp_maclaurin, binomial_maclaurin, ln_maclaurin, hyperbole_maclaurin, arccos_maclaurin, \
     arctan_maclaurin, arcsin_maclaurin, tan_maclaurin, sin_maclaurin, cos_maclaurin
 import matplotlib.pyplot as plt
+from math import pi
+import pygame
 
 root = Tk()
 root.title('Calculator')
 root.geometry('600x700')
 
-
+pygame.mixer.init()
+pygame.mixer.music.load("sounds/popsound.mp3")
+def popsound():
+    pygame.mixer.music.play(loops=0)
 def set_text(text):
     entrybox.delete(0, END)
     entrybox.insert(0, text)
     global funcFlag
     funcFlag = entrybox.get()
+    popsound()
 
 
 master_frame = Frame(root)
@@ -38,15 +44,17 @@ def solveButton():
     answerbox.delete(0, END)
     answerbox.insert(0, getAnswer())
     plot_graph(funcFlag)
+    popsound()
 
 
-def errorPopup():
+def errorPopup(error_text):
+    popsound()
     global pop
     pop = Toplevel(root)
     pop.title('Error')
     pop.geometry('250x150')
     pop.config()
-    popLabel = Label(pop, text='You entered wrong data type!', font=('Arial', 13), pady=45)
+    popLabel = Label(pop, text=error_text, font=('Arial', 13), pady=45)
     popLabel.pack()
     OKbtn = Button(pop, text='OK', font=('Arial', 20), command=pop.destroy)
     OKbtn.pack()
@@ -55,54 +63,96 @@ def errorPopup():
 
 
 def getXM():
-    expressionStr = entrybox.get()  # sin(x)
-    expressionStr = expressionStr.replace(',', '.')
-    argumentX = expressionStr[expressionStr.index('(') + 1:expressionStr.index(')')]
-    # if argumentX.isdigit()==0:
-    #     print('You entered wrong data type!')
-    #     errorPopup()
-    argumentX = str(argumentX)
-    if '+' in argumentX:
-        argumentX = eval(argumentX + '-1')
-        try:
-            argumentX = float(argumentX)
-        except ValueError:
-            errorPopup()
-            return None
+    expressionStr = entrybox.get()
+    expressionStr = expressionStr.replace(',','.')
+    expressionStr = expressionStr.replace(' ','')
 
-    if ')^' in expressionStr:
-        argumentM = expressionStr[expressionStr.index('^') + 1:]
+    argumentX = expressionStr[expressionStr.index('(')+1:expressionStr.index(')')]
+    if 'pi' in expressionStr:
+        if '/' in argumentX:
+            return pi/float(argumentX[argumentX.index('/')+1:])########
+        elif '*' in expressionStr:
+            return pi*float(argumentX[argumentX.index('*')+1:])
+        else:
+            return pi
 
-        try:
-            return float(argumentX), int(argumentM)
-        except ValueError:
-            errorPopup()
-            return None
-
-    return float(argumentX)
+    else:
+        if '+' in argumentX and (')^' not in expressionStr):
+            argumentX = argumentX[argumentX.index('+')+1:]
+            try:
+                return float(argumentX)
+            except:
+                errorPopup('You entered wrong data type!')
+        elif ')^' in expressionStr:
+            argumentM = expressionStr[expressionStr.index('^')+1:]
+            argumentX = argumentX[argumentX.index('+')+1:]
+            try:
+                return float(argumentX), float(argumentM)
+            except:
+                errorPopup('You entered wrong data type!')
+        else:
+            try:
+                return float(argumentX)
+            except:
+                errorPopup('You entered wrong data type!')
 
 
 def getAnswer():
-    if funcFlag == 'cos(x)' and getXM() is not None:
+    if funcFlag == 'cos(x)' and getXM() is not None: #
         return cos_maclaurin(getXM())
-    elif funcFlag == 'ln(1 + x)' and getXM() is not None:
-        return ln_maclaurin(getXM())
-    elif funcFlag == 'e^(x)' and getXM() is not None:
+    
+    elif funcFlag == 'ln(1 + x)' and getXM() is not None: 
+        if -1 < getXM() and getXM() <= 1:
+            return ln_maclaurin(getXM())
+        else:
+            errorPopup('Enter -1 < x <= 1')
+
+    elif funcFlag == 'e^(x)' and getXM() is not None: #
         return exp_maclaurin(getXM())
-    elif funcFlag == 'arcsin(x)' and getXM() is not None:
-        return arcsin_maclaurin(getXM())
-    elif funcFlag == 'sin(x)' and getXM() is not None:
+    
+    elif funcFlag == 'arcsin(x)' and getXM() is not None: #
+        if -1 <= getXM() and getXM() <= 1:
+            return arcsin_maclaurin(getXM())
+        else:
+            errorPopup('Enter -1 <= x <= 1')
+    
+    elif funcFlag == 'sin(x)' and getXM() is not None: #
         return sin_maclaurin(getXM())
-    elif funcFlag == 'tg(x)' and getXM() is not None:
-        return tan_maclaurin(getXM())
-    elif funcFlag == 'arccos(x)' and getXM() is not None:
-        return arccos_maclaurin(getXM())
-    elif funcFlag == '(1 + x)^m' and getXM() is not None:
-        return binomial_maclaurin(*getXM())
-    elif funcFlag == 'arctg(x)' and getXM() is not None:
-        return arctan_maclaurin(getXM())
-    elif funcFlag == '1/(1+x)' and getXM() is not None:
-        return hyperbole_maclaurin(getXM())
+    
+    elif funcFlag == 'tg(x)' and getXM() is not None: #
+        if getXM()%(pi/2)!=0:
+            return tan_maclaurin(getXM())
+        else:
+            errorPopup('Enter x not equal pi/2 + pi*k')
+    
+    elif funcFlag == 'arccos(x)' and getXM() is not None: #
+        if -1 <= getXM() and getXM() <= 1:
+            return arccos_maclaurin(getXM())
+        else:
+            errorPopup('Enter -1 <= x <= 1')
+    
+    elif funcFlag == '(1 + x)^m' and getXM() is not None:#
+        argXM = getXM()
+        if (argXM[1]>=0) and (-1<=argXM[0]<=1):
+            return binomial_maclaurin(*getXM())
+        elif -1 < argXM[1] < 0 and -1<argXM[0]<=1:
+            return binomial_maclaurin(*getXM())
+        elif argXM[1]<=1 and -1<argXM[0]<1:
+            return binomial_maclaurin(*getXM())
+        else:
+            errorPopup('Enter x and m:\nm>=0, x[-1, 1]\n -1<m<0, x(-1, 1]\nm<=-1, x(-1, 1)')
+    
+    elif funcFlag == 'arctg(x)' and getXM() is not None: #
+        if -1 <= getXM() and getXM() <= 1:
+            return arctan_maclaurin(getXM())
+        else:
+            errorPopup('Enter -1 <= x <= 1')
+    
+    elif funcFlag == '1/(1+x)' and (getXM() is not None): #
+        if -1 < getXM() and getXM() < 1:
+            return hyperbole_maclaurin(getXM())
+        else:
+            errorPopup('Enter -1 < x < 1')
     else:
         return ''
 
