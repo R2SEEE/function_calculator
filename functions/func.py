@@ -33,7 +33,8 @@ def exp_maclaurin(x):
 
 def evaluate_error_binomial(step, x, m, num, den):
     error = num / den
-    error *= Decimal(f"{((1 + x) ** (m - step))}")
+    pow_member = Decimal(f"{m - step}")
+    error *= Decimal(f"{((1 + x) ** pow_member)}")
     for i in range(m, m - step, -1):
         error *= Decimal(f"{i}")
     return error
